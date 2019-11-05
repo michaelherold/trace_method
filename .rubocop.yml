@@ -1,0 +1,8 @@
+AllCops:
+  Include:
+    - Dangerfile
+    - Gemfile
+    - Guardfile
+    - Rakefile
+    - '*.gemspec'
+  TargetRubyVersion: 2.6
