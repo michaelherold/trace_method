@@ -2,6 +2,7 @@ require 'monitor'
 
 require 'tracer/adapters'
 require 'tracer/config'
+require 'tracer/module'
 require 'tracer/version'
 
 module Tracer
