@@ -13,5 +13,7 @@ module Tracer
         raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
       end
     end
+
+    autoload :Redis, 'tracer/adapters/redis'
   end
 end

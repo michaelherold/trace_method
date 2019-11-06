@@ -19,8 +19,10 @@ group :development do
   gem 'yardstick'
 
   group :test do
+    gem 'fakeredis'
     gem 'pry-byebug'
     gem 'rake'
+    gem 'redis'
   end
 end
 
