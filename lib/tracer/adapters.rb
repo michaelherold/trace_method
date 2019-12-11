@@ -9,6 +9,10 @@ module Tracer
         raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
       end
 
+      def fetch_traced_callers(mod)
+        raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
+      end
+
       def store_caller(mod, method_name, calling_line)
         raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
       end

@@ -15,5 +15,6 @@ class Tracer::Adapters::RedisTest < Minitest::Test
 
     assert_equal ['foo'], @adapter.fetch_traces(mod)
     assert_equal [line], @adapter.fetch_callers(mod, 'foo')
+    assert_equal({'foo' => [line]}, @adapter.fetch_traced_callers(mod))
   end
 end

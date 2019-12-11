@@ -21,6 +21,20 @@ module Tracer
         client.smembers as_key(base_key, *mod.split('::'))
       end
 
+      def fetch_traced_callers(mod)
+        traces = fetch_traces(mod)
+        result = {}
+
+        client.pipelined do
+          traces.each do |method_name|
+            result[method_name] = fetch_callers mod, method_name
+          end
+        end
+
+        result.transform_values!(&:value)
+        result
+      end
+
       def store_caller(mod, method_name, calling_line)
         namespace = as_key base_key, *mod.split('::')
         method_key = as_key namespace, method_name
