@@ -12,6 +12,9 @@ require 'pry'
 
 require 'minitest/autorun'
 require 'minitest/mock'
+require 'minitest/reporters'
 require 'mutant/minitest/coverage'
+
+Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 
 Dir[File.expand_path('support/**/*.rb', __dir__)].each { |file| require file }

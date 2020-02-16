@@ -31,5 +31,6 @@ group :test do
   gem 'danger-commit_lint', require: false
   gem 'danger-rubocop', require: false
   gem 'minitest'
+  gem 'minitest-reporters'
   gem 'simplecov', require: false
 end
