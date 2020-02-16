@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'caller_extractor'
 
 module Tracer
@@ -8,7 +10,7 @@ module Tracer
 
         methods.each do |method_name|
           define_method method_name do |*args, &blk|
-            trace = Tracer::CallerExtractor.(caller)
+            trace = Tracer::CallerExtractor.call(caller)
             line, *_context = trace.split(/:in `/)
             line = line.delete_prefix(Tracer.config.app_root) if Tracer.config.app_root?
 

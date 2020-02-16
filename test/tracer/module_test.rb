@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Tracer::ModuleTest < Minitest::Test
@@ -18,7 +20,7 @@ class Tracer::ModuleTest < Minitest::Test
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{tracer/test/tracer/module_test\.rb:15$}, callers.first
+    assert_match %r{tracer/test/tracer/module_test\.rb:17$}, callers.first
   end
 
   def test_inspect
@@ -42,7 +44,7 @@ class Tracer::ModuleTest < Minitest::Test
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{mock\.rb:\d+$}, callers.first
+    assert_match(/mock\.rb:\d+$/, callers.first)
   end
 
   def test_caller_extraction_with_an_app_root_and_ignores
@@ -61,6 +63,6 @@ class Tracer::ModuleTest < Minitest::Test
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{test\.rb:\d+$}, callers.first
+    assert_match(/test\.rb:\d+$/, callers.first)
   end
 end

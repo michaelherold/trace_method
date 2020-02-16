@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tracer
   class Config
     attr_accessor :adapter
@@ -5,7 +7,7 @@ module Tracer
     attr_accessor :ignored
 
     def app_root?
-      !!app_root
+      !app_root.nil?
     end
   end
 end

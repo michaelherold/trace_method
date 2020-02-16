@@ -11,9 +11,7 @@ code_changed = git.modified_files.grep(/lib/).any?
 tests_changed = git.modified_files.grep(/spec/).any?
 
 # Checks for a change log entry when code changes
-if (code_changed || tests_changed) && !declared_trivial
-  changelog.have_you_updated_changelog?
-end
+changelog.have_you_updated_changelog? if (code_changed || tests_changed) && !declared_trivial
 
 # Checks for well-formed commit messages
 commit_lint.check

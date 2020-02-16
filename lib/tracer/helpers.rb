@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tracer
   module Helpers
     def trace_methods(*methods)

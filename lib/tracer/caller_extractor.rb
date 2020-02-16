@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Tracer
   module CallerExtractor
     def self.call(lines)

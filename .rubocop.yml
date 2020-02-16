@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Include:
     - Dangerfile
@@ -5,4 +7,19 @@ AllCops:
     - Guardfile
     - Rakefile
     - '*.gemspec'
+    - '**/*.rb'
   TargetRubyVersion: 2.6
+
+Style/ClassAndModuleChildren:
+  Exclude:
+    - test/**/*_test.rb
+
+Style/Documentation:
+  Enabled: false
+
+Metrics:
+  Exclude:
+    - test/**/*_test.rb
+
+Metrics/LineLength:
+  Max: 100

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Tracer::Adapters::RedisTest < Minitest::Test
@@ -9,12 +11,12 @@ class Tracer::Adapters::RedisTest < Minitest::Test
 
   def test_that_it_can_store_and_fetch_callers_and_traces
     mod = 'MyModule::IsAwesome'
-    line = "/opt/ruby/.gem/ruby/2.6.3/gems/pry-0.12.2/lib/pry/pry_instance.rb:272"
+    line = '/opt/ruby/.gem/ruby/2.6.3/gems/pry-0.12.2/lib/pry/pry_instance.rb:272'
 
     @adapter.store_caller mod, 'foo', line
 
     assert_equal ['foo'], @adapter.fetch_traces(mod)
     assert_equal [line], @adapter.fetch_callers(mod, 'foo')
-    assert_equal({'foo' => [line]}, @adapter.fetch_traced_callers(mod))
+    assert_equal({ 'foo' => [line] }, @adapter.fetch_traced_callers(mod))
   end
 end

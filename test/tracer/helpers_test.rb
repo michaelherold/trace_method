@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class Tracer::HelpersTest < Minitest::Test
@@ -21,7 +23,7 @@ class Tracer::HelpersTest < Minitest::Test
 
       callers = Wahoo.traced_callers
       assert_equal 1, callers.length
-      assert_match %r{tracer/test/tracer/helpers_test\.rb:18$}, callers['wahoo'].first
+      assert_match %r{tracer/test/tracer/helpers_test\.rb:20$}, callers['wahoo'].first
     end
   end
 
