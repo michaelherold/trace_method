@@ -1,3 +1,5 @@
+require_relative 'caller_extractor'
+
 module Tracer
   module Module
     def self.new(*methods)
@@ -6,7 +8,7 @@ module Tracer
 
         methods.each do |method_name|
           define_method method_name do |*args, &blk|
-            trace = caller.first
+            trace = Tracer::CallerExtractor.(caller)
             line, *_context = trace.split(/:in `/)
 
             Tracer.config.adapter.store_caller self.class.name, method_name, line

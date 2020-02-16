@@ -26,4 +26,41 @@ class Tracer::ModuleTest < Minitest::Test
 
     assert_equal 'Tracer(foo, bar, baz)', mod.inspect
   end
+
+  def test_caller_extraction_with_an_app_root
+    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = Tracer::Config.new
+    config.adapter = adapter
+
+    Tracer.method(:stub).source_location.then do |mock_file, _|
+      config.app_root = File.dirname(mock_file)
+    end
+
+    Tracer.stub(:config, config) { Foo.new.foo }
+
+    assert_equal ['foo'], adapter.fetch_traces(Foo.name)
+
+    callers = adapter.fetch_callers(Foo.name, 'foo')
+    assert_equal 1, callers.length
+    assert_match %r{minitest/mock\.rb:\d+$}, callers.first
+  end
+
+  def test_caller_extraction_with_an_app_root_and_ignores
+    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = Tracer::Config.new
+    config.adapter = adapter
+
+    Tracer.method(:stub).source_location.then do |mock_file, _|
+      config.app_root = File.dirname(mock_file)
+      config.ignored = File.basename(mock_file)
+    end
+
+    Tracer.stub(:config, config) { Foo.new.foo }
+
+    assert_equal ['foo'], adapter.fetch_traces(Foo.name)
+
+    callers = adapter.fetch_callers(Foo.name, 'foo')
+    assert_equal 1, callers.length
+    assert_match %r{minitest/test\.rb:\d+$}, callers.first
+  end
 end
