@@ -19,4 +19,16 @@ class Tracer::Adapters::RedisTest < Minitest::Test
     assert_equal [line], @adapter.fetch_callers(mod, 'foo')
     assert_equal({ 'foo' => [line] }, @adapter.fetch_traced_callers(mod))
   end
+
+  def test_that_it_can_clear_stored_data
+    mod = 'This::Test'
+    line = '/path/to/this/test.rb:9001'
+
+    @adapter.store_caller mod, 'foo', line
+    @adapter.clear
+
+    assert_equal [], @adapter.fetch_traces(mod)
+    assert_equal [], @adapter.fetch_callers(mod, 'foo')
+    assert_equal({}, @adapter.fetch_traced_callers(mod))
+  end
 end

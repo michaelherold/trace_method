@@ -3,6 +3,10 @@
 module Tracer
   module Adapters
     class Base
+      def clear
+        raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
+      end
+
       def fetch_callers(_mod, _method_name)
         raise NotImplementedError, "#{self.class} is a base class that you must inherit to use"
       end

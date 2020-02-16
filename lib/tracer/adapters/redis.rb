@@ -15,6 +15,11 @@ module Tracer
         @expiry = 60 * 60 * 24 * 90
       end
 
+      def clear
+        client.smembers(base_key).each(&method(:clear_namespace))
+        client.del base_key
+      end
+
       def fetch_callers(mod, method_name)
         client.smembers as_key(base_key, *mod.split('::'), method_name)
       end
@@ -42,9 +47,11 @@ module Tracer
         method_key = as_key namespace, method_name
 
         client.pipelined do
+          client.sadd base_key, namespace
           client.sadd namespace, method_name
           client.sadd method_key, calling_line
 
+          client.expire base_key, expiry
           client.expire namespace, expiry
           client.expire method_key, expiry
         end
@@ -58,6 +65,15 @@ module Tracer
 
       def as_key(*pieces)
         pieces.join(':')
+      end
+
+      def clear_namespace(namespace)
+        members = client.smembers(namespace)
+
+        client.pipelined do
+          members.each { |method_name| client.del as_key(namespace, method_name) }
+          client.del namespace
+        end
       end
     end
   end
