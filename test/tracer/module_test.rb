@@ -4,9 +4,13 @@ require 'test_helper'
 
 class Tracer::ModuleTest < Minitest::Test
   class Foo
-    prepend Tracer::Module.new(:foo)
+    prepend Tracer::Module.new(:foo, :bar)
 
     def foo; end
+
+    def bar(a, b = 'b', *args, c:, d: 'd', **kwargs, &blk)
+      [a, b, *args, c, d, kwargs, yield]
+    end
   end
 
   def test_that_it_wraps_methods_in_a_tracer
@@ -20,7 +24,17 @@ class Tracer::ModuleTest < Minitest::Test
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{tracer/test/tracer/module_test\.rb:17$}, callers.first
+    assert_match %r{tracer/test/tracer/module_test\.rb:21$}, callers.first
+  end
+
+  def test_that_is_properly_delegates_arguments
+    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = Tracer::Config.new
+    config.adapter = adapter
+
+    Tracer.stub(:config, config) do
+      assert_equal [1, 2, 3, 4, 5, { e: 6 }, 7], Foo.new.bar(1, 2, 3, c: 4, d: 5, e: 6) { 7 }
+    end
   end
 
   def test_inspect
