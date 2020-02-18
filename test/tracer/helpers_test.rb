@@ -28,15 +28,12 @@ class Tracer::HelpersTest < TracerTests::TestCase
   end
 
   def test_that_it_requires_some_methods_to_trace
-    assert_raises Tracer::UnspecifiedMethods do
+    assert_raises_with_message Tracer::UnspecifiedMethods, message: 'You must give at least one method to trace' do
       Class.new do
         extend Tracer::Helpers
 
         trace_method
       end
-    rescue => ex
-      assert_equal 'You must give at least one method to trace', ex.message
-      raise
     end
   end
 end
