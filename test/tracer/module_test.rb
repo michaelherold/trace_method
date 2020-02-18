@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Tracer::ModuleTest < Minitest::Test
+class Tracer::ModuleTest < TracerTests::TestCase
   class Foo
     prepend Tracer::Module.new(:foo, :bar)
 

@@ -2,9 +2,7 @@
 
 require 'test_helper'
 
-class Tracer::Adapters::BaseTest < Minitest::Test
-  cover 'Tracer::Adapters::Base'
-
+class Tracer::Adapters::BaseTest < TracerTests::TestCase
   def test_that_you_cannot_fetch_callers_on_the_base_class
     assert_raises NotImplementedError, 'Tracer::Adapters::Base is a base class that you must inherit to use' do
       Tracer::Adapters::Base.new.fetch_callers 'MyAwesome::Class', 'foo'

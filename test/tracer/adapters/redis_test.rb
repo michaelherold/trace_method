@@ -2,9 +2,7 @@
 
 require 'test_helper'
 
-class Tracer::Adapters::RedisTest < Minitest::Test
-  cover 'Tracer::Adapters::Redis'
-
+class Tracer::Adapters::RedisTest < TracerTests::TestCase
   def setup
     @adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
   end

@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class Tracer::HelpersTest < Minitest::Test
+class Tracer::HelpersTest < TracerTests::TestCase
   class Wahoo
     extend Tracer::Helpers
 
