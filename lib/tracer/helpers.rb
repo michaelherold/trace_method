@@ -3,7 +3,7 @@
 module Tracer
   module Helpers
     def trace_methods(*methods)
-      raise UnspecifiedMethods, 'You must give as least one method to trace' if methods.empty?
+      raise UnspecifiedMethods, 'You must give at least one method to trace' if methods.empty?
 
       prepend Tracer::Module.new(*methods)
     end

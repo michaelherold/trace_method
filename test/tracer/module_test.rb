@@ -8,9 +8,11 @@ class Tracer::ModuleTest < TracerTests::TestCase
 
     def foo; end
 
-    def bar(a, b = 'b', *args, c:, d: 'd', **kwargs, &blk)
-      [a, b, *args, c, d, kwargs, yield]
+    # rubocop:disable Naming/UncommunicativeMethodParamName
+    def bar(a, b = 'b', *args, c:, d: 'd', **kwargs)
+      [a, b, *args, c, d, kwargs, block_given? ? yield : nil].compact
     end
+    # rubocop:enable Naming/UncommunicativeMethodParamName
   end
 
   def test_that_it_wraps_methods_in_a_tracer
@@ -24,7 +26,7 @@ class Tracer::ModuleTest < TracerTests::TestCase
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{tracer/test/tracer/module_test\.rb:21$}, callers.first
+    assert_match %r{test/tracer/module_test\.rb:\d+$}, callers.first
   end
 
   def test_that_is_properly_delegates_arguments
@@ -58,7 +60,7 @@ class Tracer::ModuleTest < TracerTests::TestCase
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match(/mock\.rb:\d+$/, callers.first)
+    assert_match(%r{^/mock\.rb:\d+$}, callers.first)
   end
 
   def test_caller_extraction_with_an_app_root_and_ignores

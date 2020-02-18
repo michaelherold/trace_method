@@ -23,7 +23,7 @@ class Tracer::HelpersTest < TracerTests::TestCase
 
       callers = Wahoo.traced_callers
       assert_equal 1, callers.length
-      assert_match %r{tracer/test/tracer/helpers_test\.rb:20$}, callers['wahoo'].first
+      assert_match %r{tracer/test/tracer/helpers_test\.rb:\d+$}, callers['wahoo'].first
     end
   end
 
@@ -34,6 +34,9 @@ class Tracer::HelpersTest < TracerTests::TestCase
 
         trace_method
       end
+    rescue => ex
+      assert_equal 'You must give at least one method to trace', ex.message
+      raise
     end
   end
 end

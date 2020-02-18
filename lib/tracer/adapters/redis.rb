@@ -9,11 +9,15 @@ end
 module Tracer
   module Adapters
     class Redis < Base
+      DEFAULT_EXPIRY = 60 * 60 * 24 * 90
+
       def initialize(configuration)
         @base_key = 'tracer'
         @client = ::Redis.new(configuration)
-        @expiry = 60 * 60 * 24 * 90
+        @expiry = DEFAULT_EXPIRY
       end
+
+      attr_reader :expiry
 
       def clear
         client.smembers(base_key).each(&method(:clear_namespace))
@@ -21,11 +25,11 @@ module Tracer
       end
 
       def fetch_callers(mod, method_name)
-        client.smembers as_key(base_key, *mod.split('::'), method_name)
+        client.smembers as_key(base_key, mod.split('::'), method_name)
       end
 
       def fetch_traces(mod)
-        client.smembers as_key(base_key, *mod.split('::'))
+        client.smembers as_key(base_key, mod.split('::'))
       end
 
       def fetch_traced_callers(mod)
@@ -43,7 +47,7 @@ module Tracer
       end
 
       def store_caller(mod, method_name, calling_line)
-        namespace = as_key base_key, *mod.split('::')
+        namespace = as_key base_key, mod.split('::')
         method_key = as_key namespace, method_name
 
         client.pipelined do
@@ -61,7 +65,6 @@ module Tracer
 
       attr_reader :base_key
       attr_reader :client
-      attr_reader :expiry
 
       def as_key(*pieces)
         pieces.join(':')
