@@ -5,7 +5,11 @@ module Tracer
     def trace_methods(*methods)
       raise UnspecifiedMethods, 'You must give at least one method to trace' if methods.empty?
 
-      prepend Tracer::Module.new(*methods)
+      if (mod = ancestors.find(&:__tracer__?))
+        Module.define_methods_on(mod, *methods)
+      else
+        prepend Module.new(*methods)
+      end
     end
     alias trace_method trace_methods
 

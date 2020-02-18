@@ -36,4 +36,25 @@ class Tracer::HelpersTest < TracerTests::TestCase
       end
     end
   end
+
+  def test_that_it_extends_a_preexisting_module
+    preexisting = Class.new do
+      extend Tracer::Helpers
+
+      trace_methods :cool
+      trace_methods :no_doubt
+
+      def cool; end
+
+      def no_doubt; end
+    end
+
+    modules = preexisting.ancestors.select(&:__tracer__?)
+
+    assert_equal 1, modules.length
+
+    mod = modules.first
+    assert_equal %i[cool no_doubt], mod.instance_methods.sort
+    assert_equal 'Tracer(cool, no_doubt)', mod.inspect
+  end
 end

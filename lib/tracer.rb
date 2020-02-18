@@ -2,6 +2,8 @@
 
 require 'monitor'
 
+require 'tracer/core_ext/module'
+
 require 'tracer/adapters'
 require 'tracer/config'
 require 'tracer/helpers'

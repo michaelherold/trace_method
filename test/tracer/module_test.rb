@@ -42,7 +42,7 @@ class Tracer::ModuleTest < TracerTests::TestCase
   def test_inspect
     mod = Tracer::Module.new(:foo, :bar, :baz)
 
-    assert_equal 'Tracer(foo, bar, baz)', mod.inspect
+    assert_equal 'Tracer(bar, baz, foo)', mod.inspect
   end
 
   def test_caller_extraction_with_an_app_root
@@ -80,5 +80,9 @@ class Tracer::ModuleTest < TracerTests::TestCase
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
     assert_match(/test\.rb:\d+$/, callers.first)
+  end
+
+  def test_that_it_is_tagged_with_a_tracer_tag
+    assert Tracer::Module.new(:foo).__tracer__?
   end
 end
