@@ -14,4 +14,28 @@ class TracerTest < TracerTests::TestCase
 
     assert_equal 'foo', Tracer.config.adapter
   end
+
+  def test_that_it_can_retrieve_modules_with_traces
+    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = Tracer::Config.new
+    config.adapter = adapter
+
+    sample = Class.new do
+      extend Tracer::Helpers
+
+      trace_method :testing
+
+      def self.name
+        'Sample'
+      end
+
+      def testing; end
+    end
+
+    Tracer.stub(:config, config) do
+      sample.new.testing
+
+      assert_equal ['Sample'], Tracer.traced_modules
+    end
+  end
 end

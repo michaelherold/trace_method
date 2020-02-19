@@ -46,6 +46,12 @@ module Tracer
         result
       end
 
+      def fetch_traced_modules
+        client
+          .smembers(base_key)
+          .map { |key| as_module(key) }
+      end
+
       def store_caller(mod, method_name, calling_line)
         namespace = as_key base_key, mod.split('::')
         method_key = as_key namespace, method_name
@@ -68,6 +74,12 @@ module Tracer
 
       def as_key(*pieces)
         pieces.join(':')
+      end
+
+      def as_module(key)
+        key
+          .delete_prefix("#{base_key}:")
+          .gsub(':', '::')
       end
 
       def clear_namespace(namespace)
