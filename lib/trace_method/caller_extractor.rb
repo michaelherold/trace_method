@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tracer
+module TraceMethod
   module CallerExtractor
     def self.call(lines)
       if (matcher = construct_matcher)
@@ -11,9 +11,9 @@ module Tracer
     end
 
     private_class_method def self.construct_matcher
-      return unless (root = Tracer.config.app_root)
+      return unless (root = TraceMethod.config.app_root)
 
-      ignores = Array(Tracer.config.ignored)
+      ignores = Array(TraceMethod.config.ignored)
 
       if ignores.empty?
         Regexp.new("^#{root}")

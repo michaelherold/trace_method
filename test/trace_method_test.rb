@@ -2,26 +2,26 @@
 
 require 'test_helper'
 
-class TracerTest < TracerTests::TestCase
+class TraceMethodTest < TraceMethodTests::TestCase
   def test_that_it_has_a_version_number
-    refute_nil ::Tracer::VERSION
+    refute_nil ::TraceMethod::VERSION
   end
 
   def test_that_it_can_be_configured
-    Tracer.configure do |config|
+    TraceMethod.configure do |config|
       config.adapter = 'foo'
     end
 
-    assert_equal 'foo', Tracer.config.adapter
+    assert_equal 'foo', TraceMethod.config.adapter
   end
 
   def test_that_it_can_retrieve_modules_with_traces
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
-    config = Tracer::Config.new
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
     config.adapter = adapter
 
     sample = Class.new do
-      extend Tracer::Helpers
+      extend TraceMethod::Helpers
 
       trace_method :testing
 
@@ -32,10 +32,10 @@ class TracerTest < TracerTests::TestCase
       def testing; end
     end
 
-    Tracer.stub(:config, config) do
+    TraceMethod.stub(:config, config) do
       sample.new.testing
 
-      assert_equal ['Sample'], Tracer.traced_modules
+      assert_equal ['Sample'], TraceMethod.traced_modules
     end
   end
 end

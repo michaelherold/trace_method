@@ -2,15 +2,15 @@
 
 require 'monitor'
 
-require 'tracer/core_ext/module'
+require_relative 'trace_method/core_ext/module'
 
-require 'tracer/adapters'
-require 'tracer/config'
-require 'tracer/helpers'
-require 'tracer/module'
-require 'tracer/version'
+require_relative 'trace_method/adapters'
+require_relative 'trace_method/config'
+require_relative 'trace_method/helpers'
+require_relative 'trace_method/module'
+require_relative 'trace_method/version'
 
-module Tracer
+module TraceMethod
   class Error < StandardError; end
   class UnspecifiedMethods < Error; end
 

@@ -36,9 +36,9 @@ task :mutant do
   command = [
     'bundle exec mutant',
     '--include test',
-    '--require tracer',
+    '--require trace_method',
     '--use minitest',
-    'Tracer*'
+    'TraceMethod*'
   ].join(' ')
 
   system command

@@ -6,13 +6,13 @@ rescue LoadError
   warn "In order to use the Redis adapter, you must have the `redis' gem"
 end
 
-module Tracer
+module TraceMethod
   module Adapters
     class Redis < Base
       DEFAULT_EXPIRY = 60 * 60 * 24 * 90
 
       def initialize(configuration)
-        @base_key = 'tracer'
+        @base_key = 'trace_method'
         @client = ::Redis.new(configuration)
         @expiry = DEFAULT_EXPIRY
       end

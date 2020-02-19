@@ -2,12 +2,12 @@
 
 require_relative 'caller_extractor'
 
-module Tracer
+module TraceMethod
   module Module
     def self.new(*methods)
       ::Module.new do
-        define_singleton_method(:__tracer__?) { true }
-        define_singleton_method(:inspect) { "Tracer(#{instance_methods.sort.join(', ')})" }
+        define_singleton_method(:__trace_method__?) { true }
+        define_singleton_method(:inspect) { "TraceMethod(#{instance_methods.sort.join(', ')})" }
 
         Module.define_methods_on(self, *methods)
       end
@@ -16,11 +16,11 @@ module Tracer
     def self.define_methods_on(mod, *methods)
       methods.each do |method_name|
         mod.define_method method_name do |*args, &blk|
-          trace = Tracer::CallerExtractor.call(caller)
+          trace = TraceMethod::CallerExtractor.call(caller)
           line, *_context = trace.split(/:in `/)
-          line = line.delete_prefix(Tracer.config.app_root) if Tracer.config.app_root?
+          line = line.delete_prefix(TraceMethod.config.app_root) if TraceMethod.config.app_root?
 
-          Tracer.config.adapter.store_caller self.class.name, method_name, line
+          TraceMethod.config.adapter.store_caller self.class.name, method_name, line
 
           super(*args, &blk)
         end

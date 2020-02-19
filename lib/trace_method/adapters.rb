@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tracer
+module TraceMethod
   module Adapters
     class Base
       def clear
@@ -28,6 +28,6 @@ module Tracer
       end
     end
 
-    autoload :Redis, 'tracer/adapters/redis'
+    autoload :Redis, 'trace_method/adapters/redis'
   end
 end

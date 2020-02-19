@@ -7,7 +7,7 @@ if ENV['COVERAGE']
 end
 
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
-require 'tracer'
+require 'trace_method'
 require 'pry'
 
 require 'minitest/autorun'
@@ -19,7 +19,7 @@ Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 
 Dir[File.expand_path('support/**/*.rb', __dir__)].each { |file| require file }
 
-module TracerTests
+module TraceMethodTests
   class TestCase < Minitest::Test
     def self.inherited(descendant)
       test_name = descendant.name

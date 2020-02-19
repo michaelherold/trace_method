@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Tracer
+module TraceMethod
   module Helpers
     def trace_methods(*methods)
       raise UnspecifiedMethods, 'You must give at least one method to trace' if methods.empty?
 
-      if (mod = ancestors.find(&:__tracer__?))
+      if (mod = ancestors.find(&:__trace_method__?))
         Module.define_methods_on(mod, *methods)
       else
         prepend Module.new(*methods)
@@ -24,7 +24,7 @@ module Tracer
     private
 
     def __adapter__
-      @__adapter__ ||= Tracer.config.adapter
+      @__adapter__ ||= TraceMethod.config.adapter
     end
   end
 end

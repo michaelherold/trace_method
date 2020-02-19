@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Tracer
+module TraceMethod
   class Config
     attr_accessor :adapter
     attr_accessor :app_root

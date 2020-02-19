@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class Tracer::Adapters::RedisTest < TracerTests::TestCase
+class TraceMethod::Adapters::RedisTest < TraceMethodTests::TestCase
   def test_that_it_can_store_and_fetch_callers_and_traces
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
     mod = 'MyModule::IsAwesome'
     line = '/opt/ruby/.gem/ruby/2.6.3/gems/pry-0.12.2/lib/pry/pry_instance.rb:272'
 
@@ -17,7 +17,7 @@ class Tracer::Adapters::RedisTest < TracerTests::TestCase
   end
 
   def test_that_it_can_clear_stored_data
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
     mod = 'This::Test'
     line = '/path/to/this/test.rb:9001'
 
@@ -31,7 +31,7 @@ class Tracer::Adapters::RedisTest < TracerTests::TestCase
   end
 
   def test_that_it_sets_expiries_on_used_keys
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
     mod = 'MyModule::IsAwesome'
     line = '/opt/ruby/.gem/ruby/2.6.3/gems/pry-0.12.2/lib/pry/pry_instance.rb:272'
 

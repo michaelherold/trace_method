@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class Tracer::ModuleTest < TracerTests::TestCase
+class TraceMethod::ModuleTest < TraceMethodTests::TestCase
   class Foo
-    prepend Tracer::Module.new(:foo, :bar)
+    prepend TraceMethod::Module.new(:foo, :bar)
 
     def foo; end
 
@@ -15,46 +15,46 @@ class Tracer::ModuleTest < TracerTests::TestCase
     # rubocop:enable Naming/UncommunicativeMethodParamName
   end
 
-  def test_that_it_wraps_methods_in_a_tracer
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
-    config = Tracer::Config.new
+  def test_that_it_wraps_methods_in_a_trace_method
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
     config.adapter = adapter
 
-    Tracer.stub(:config, config) { Foo.new.foo }
+    TraceMethod.stub(:config, config) { Foo.new.foo }
 
     assert_equal ['foo'], adapter.fetch_traces(Foo.name)
 
     callers = adapter.fetch_callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match %r{test/tracer/module_test\.rb:\d+$}, callers.first
+    assert_match %r{test/trace_method/module_test\.rb:\d+$}, callers.first
   end
 
   def test_that_is_properly_delegates_arguments
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
-    config = Tracer::Config.new
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
     config.adapter = adapter
 
-    Tracer.stub(:config, config) do
+    TraceMethod.stub(:config, config) do
       assert_equal [1, 2, 3, 4, 5, { e: 6 }, 7], Foo.new.bar(1, 2, 3, c: 4, d: 5, e: 6) { 7 }
     end
   end
 
   def test_inspect
-    mod = Tracer::Module.new(:foo, :bar, :baz)
+    mod = TraceMethod::Module.new(:foo, :bar, :baz)
 
-    assert_equal 'Tracer(bar, baz, foo)', mod.inspect
+    assert_equal 'TraceMethod(bar, baz, foo)', mod.inspect
   end
 
   def test_caller_extraction_with_an_app_root
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
-    config = Tracer::Config.new
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
     config.adapter = adapter
 
-    Tracer.method(:stub).source_location.then do |mock_file, _|
+    TraceMethod.method(:stub).source_location.then do |mock_file, _|
       config.app_root = File.dirname(mock_file)
     end
 
-    Tracer.stub(:config, config) { Foo.new.foo }
+    TraceMethod.stub(:config, config) { Foo.new.foo }
 
     assert_equal ['foo'], adapter.fetch_traces(Foo.name)
 
@@ -64,16 +64,16 @@ class Tracer::ModuleTest < TracerTests::TestCase
   end
 
   def test_caller_extraction_with_an_app_root_and_ignores
-    adapter = Tracer::Adapters::Redis.new(url: 'redis://localhost:5379/1')
-    config = Tracer::Config.new
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
     config.adapter = adapter
 
-    Tracer.method(:stub).source_location.then do |mock_file, _|
+    TraceMethod.method(:stub).source_location.then do |mock_file, _|
       config.app_root = File.dirname(mock_file)
       config.ignored = File.basename(mock_file)
     end
 
-    Tracer.stub(:config, config) { Foo.new.foo }
+    TraceMethod.stub(:config, config) { Foo.new.foo }
 
     assert_equal ['foo'], adapter.fetch_traces(Foo.name)
 
@@ -82,7 +82,7 @@ class Tracer::ModuleTest < TracerTests::TestCase
     assert_match(/test\.rb:\d+$/, callers.first)
   end
 
-  def test_that_it_is_tagged_with_a_tracer_tag
-    assert Tracer::Module.new(:foo).__tracer__?
+  def test_that_it_is_tagged_with_a_trace_method_tag
+    assert TraceMethod::Module.new(:foo).__trace_method__?
   end
 end
