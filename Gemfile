@@ -13,14 +13,14 @@ group :development do
   gem 'guard-yard'
   gem 'inch'
   gem 'mutant-minitest'
-  gem 'redcarpet'
   gem 'rubocop'
   gem 'yard', '~> 0.9'
   gem 'yardstick'
 
   group :test do
     gem 'fakeredis'
-    gem 'pry-byebug'
+    gem 'pry'
+    gem 'pry-byebug', platforms: %i[mri mingw x64_mingw]
     gem 'rake'
     gem 'redis'
   end
