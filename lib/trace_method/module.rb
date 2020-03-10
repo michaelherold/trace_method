@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'caller_extractor'
+require_relative 'name_extractor'
 
 module TraceMethod
   module Module
@@ -16,11 +17,12 @@ module TraceMethod
     def self.define_methods_on(mod, *methods)
       methods.each do |method_name|
         mod.define_method method_name do |*args, &blk|
+          name = NameExtractor.call(self)
           trace = TraceMethod::CallerExtractor.call(caller)
           line, *_context = trace.split(/:in `/)
           line = line.delete_prefix(TraceMethod.config.app_root) if TraceMethod.config.app_root?
 
-          TraceMethod.config.adapter.store_caller self.class.name, method_name, line
+          TraceMethod.config.adapter.store_caller name, method_name, line
 
           super(*args, &blk)
         end

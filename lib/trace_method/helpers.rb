@@ -13,11 +13,32 @@ module TraceMethod
     end
     alias trace_method trace_methods
 
+    def trace_singleton_methods(*methods)
+      raise UnspecifiedMethods, 'You must give at least one method to trace' if methods.empty?
+
+      if (mod = singleton_class.ancestors.find(&:__trace_method__?))
+        Module.define_methods_on(mod, *methods)
+      else
+        singleton_class.prepend Module.new(*methods)
+      end
+    end
+    alias trace_singleton_method trace_singleton_methods
+
     def traces
       __adapter__.fetch_traces(name)
     end
 
     def traced_callers
+      __adapter__.fetch_traced_callers(name)
+    end
+
+    def singleton_traces
+      name = NameExtractor.call(self)
+      __adapter__.fetch_traces(name)
+    end
+
+    def singleton_traced_callers
+      name = NameExtractor.call(self)
       __adapter__.fetch_traced_callers(name)
     end
 
