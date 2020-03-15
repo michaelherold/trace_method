@@ -3,7 +3,7 @@
 module TraceMethod
   module NameExtractor
     def self.call(mod)
-      return mod.class.name unless mod.is_a? Class
+      return mod.class.name unless mod.instance_of? Class
 
       case (name = mod.name)
       when String then "Class::#{name}"
