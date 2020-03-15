@@ -5,25 +5,25 @@ require 'test_helper'
 class TraceMethod::Adapters::BaseTest < TraceMethodTests::TestCase
   def test_that_you_cannot_fetch_callers_on_the_base_class
     assert_raises_with_message NotImplementedError, message: 'TraceMethod::Adapters::Base is a base class that you must inherit to use' do
-      TraceMethod::Adapters::Base.new.fetch_callers 'MyAwesome::Class', 'foo'
+      TraceMethod::Adapters::Base.new.callers 'MyAwesome::Class', 'foo'
     end
   end
 
   def test_that_you_cannot_fetch_traces_on_the_base_class
     assert_raises_with_message NotImplementedError, message: 'TraceMethod::Adapters::Base is a base class that you must inherit to use' do
-      TraceMethod::Adapters::Base.new.fetch_traces 'MyAwesome::Class'
+      TraceMethod::Adapters::Base.new.traces 'MyAwesome::Class'
     end
   end
 
-  def test_that_you_cannot_fetch_traced_callers_on_the_base_class
+  def test_that_you_cannot_traced_callers_on_the_base_class
     assert_raises_with_message NotImplementedError, message: 'TraceMethod::Adapters::Base is a base class that you must inherit to use' do
-      TraceMethod::Adapters::Base.new.fetch_traced_callers 'MyAwesome::Class'
+      TraceMethod::Adapters::Base.new.traced_callers 'MyAwesome::Class'
     end
   end
 
-  def test_that_you_cannot_store_on_the_base_class
+  def test_that_you_cannot_add_caller_on_the_base_class
     assert_raises_with_message NotImplementedError, message: 'TraceMethod::Adapters::Base is a base class that you must inherit to use' do
-      TraceMethod::Adapters::Base.new.store_caller 'MyAwesome::Class', 'foo', 'line'
+      TraceMethod::Adapters::Base.new.add_caller 'MyAwesome::Class', 'foo', 'line'
     end
   end
 
@@ -33,9 +33,9 @@ class TraceMethod::Adapters::BaseTest < TraceMethodTests::TestCase
     end
   end
 
-  def test_that_you_cannot_fetch_traced_modules_on_the_base_class
+  def test_that_you_cannot_fetch_modules_on_the_base_class
     assert_raises_with_message NotImplementedError, message: 'TraceMethod::Adapters::Base is a base class that you must inherit to use' do
-      TraceMethod::Adapters::Base.new.fetch_traced_modules
+      TraceMethod::Adapters::Base.new.modules
     end
   end
 end

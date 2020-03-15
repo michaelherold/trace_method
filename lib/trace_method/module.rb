@@ -22,7 +22,7 @@ module TraceMethod
           line, *_context = trace.split(/:in `/)
           line = line.delete_prefix(TraceMethod.config.app_root) if TraceMethod.config.app_root?
 
-          TraceMethod.config.adapter.store_caller name, method_name, line
+          TraceMethod.config.adapter.add_caller name, method_name, line
 
           super(*args, &blk)
         end

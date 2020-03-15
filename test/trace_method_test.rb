@@ -35,7 +35,7 @@ class TraceMethodTest < TraceMethodTests::TestCase
     TraceMethod.stub(:config, config) do
       sample.new.testing
 
-      assert_equal ['Sample'], TraceMethod.traced_modules
+      assert_equal ['Sample'], TraceMethod.modules_with_traces
     end
   end
 end

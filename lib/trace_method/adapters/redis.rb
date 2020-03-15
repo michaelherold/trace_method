@@ -24,21 +24,21 @@ module TraceMethod
         client.del base_key
       end
 
-      def fetch_callers(mod, method_name)
+      def callers(mod, method_name)
         client.smembers as_key(base_key, mod.split('::'), method_name)
       end
 
-      def fetch_traces(mod)
+      def traces(mod)
         client.smembers as_key(base_key, mod.split('::'))
       end
 
-      def fetch_traced_callers(mod)
-        traces = fetch_traces(mod)
+      def traced_callers(mod)
+        traces = traces(mod)
         result = {}
 
         client.pipelined do
           traces.each do |method_name|
-            result[method_name] = fetch_callers mod, method_name
+            result[method_name] = callers mod, method_name
           end
         end
 
@@ -46,13 +46,13 @@ module TraceMethod
         result
       end
 
-      def fetch_traced_modules
+      def modules
         client
           .smembers(base_key)
           .map { |key| as_module(key) }
       end
 
-      def store_caller(mod, method_name, calling_line)
+      def add_caller(mod, method_name, calling_line)
         namespace = as_key base_key, mod.split('::')
         method_key = as_key namespace, method_name
 

@@ -22,9 +22,9 @@ class TraceMethod::ModuleTest < TraceMethodTests::TestCase
 
     TraceMethod.stub(:config, config) { Foo.new.foo }
 
-    assert_equal ['foo'], adapter.fetch_traces(Foo.name)
+    assert_equal ['foo'], adapter.traces(Foo.name)
 
-    callers = adapter.fetch_callers(Foo.name, 'foo')
+    callers = adapter.callers(Foo.name, 'foo')
     assert_equal 1, callers.length
     assert_match %r{test/trace_method/module_test\.rb:\d+$}, callers.first
   end
@@ -56,9 +56,9 @@ class TraceMethod::ModuleTest < TraceMethodTests::TestCase
 
     TraceMethod.stub(:config, config) { Foo.new.foo }
 
-    assert_equal ['foo'], adapter.fetch_traces(Foo.name)
+    assert_equal ['foo'], adapter.traces(Foo.name)
 
-    callers = adapter.fetch_callers(Foo.name, 'foo')
+    callers = adapter.callers(Foo.name, 'foo')
     assert_equal 1, callers.length
     assert_match(%r{^/mock\.rb:\d+$}, callers.first)
   end
@@ -75,9 +75,9 @@ class TraceMethod::ModuleTest < TraceMethodTests::TestCase
 
     TraceMethod.stub(:config, config) { Foo.new.foo }
 
-    assert_equal ['foo'], adapter.fetch_traces(Foo.name)
+    assert_equal ['foo'], adapter.traces(Foo.name)
 
-    callers = adapter.fetch_callers(Foo.name, 'foo')
+    callers = adapter.callers(Foo.name, 'foo')
     assert_equal 1, callers.length
     assert_match(/test\.rb:\d+$/, callers.first)
   end

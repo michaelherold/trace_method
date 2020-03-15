@@ -28,7 +28,7 @@ module TraceMethod
     @mutex ||= Monitor.new
   end
 
-  def self.traced_modules
-    config.adapter.fetch_traced_modules
+  def self.modules_with_traces
+    config.adapter.modules
   end
 end

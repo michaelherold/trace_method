@@ -13,21 +13,21 @@ module TraceMethod
     alias trace_singleton_method trace_singleton_methods
 
     def traces
-      __adapter__.fetch_traces(name)
+      __adapter__.traces(name)
     end
 
     def traced_callers
-      __adapter__.fetch_traced_callers(name)
+      __adapter__.traced_callers(name)
     end
 
     def singleton_traces
       name = NameExtractor.call(self)
-      __adapter__.fetch_traces(name)
+      __adapter__.traces(name)
     end
 
     def singleton_traced_callers
       name = NameExtractor.call(self)
-      __adapter__.fetch_traced_callers(name)
+      __adapter__.traced_callers(name)
     end
 
     private
