@@ -28,6 +28,7 @@ class TraceMethod::HelpersTest < TraceMethodTests::TestCase
       Wahoo.new.wahoo
 
       assert_equal ['wahoo'], Wahoo.traces
+      assert_match %r{test/trace_method/helpers_test\.rb:\d+$}, Wahoo.callers_of(:wahoo).first
 
       callers = Wahoo.traced_callers
       assert_equal 1, callers.length
@@ -75,6 +76,7 @@ class TraceMethod::HelpersTest < TraceMethodTests::TestCase
       ExtendedSingleton.zipadee
 
       assert_equal ['zipadee'], ExtendedSingleton.singleton_traces
+      assert_match %r{test/trace_method/helpers_test\.rb:\d+$}, ExtendedSingleton.singleton_callers_of('zipadee').first
 
       callers = ExtendedSingleton.singleton_traced_callers
       assert_equal 1, callers.length
@@ -99,6 +101,7 @@ class TraceMethod::HelpersTest < TraceMethodTests::TestCase
       anonymous.vuvuzela
 
       assert_equal ['vuvuzela'], anonymous.singleton_traces
+      assert_match %r{test/trace_method/helpers_test\.rb:\d+$}, anonymous.singleton_callers_of('vuvuzela').first
 
       callers = anonymous.singleton_traced_callers
       assert_equal 1, callers.length

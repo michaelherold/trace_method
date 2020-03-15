@@ -2,6 +2,10 @@
 
 module TraceMethod
   module Helpers
+    def callers_of(method)
+      __adapter__.callers(name, method)
+    end
+
     def trace_methods(*methods)
       add_traces_for(self, methods)
     end
@@ -18,6 +22,11 @@ module TraceMethod
 
     def traced_callers
       __adapter__.traced_callers(name)
+    end
+
+    def singleton_callers_of(method)
+      name = NameExtractor.call(self)
+      __adapter__.callers(name, method)
     end
 
     def singleton_traces
