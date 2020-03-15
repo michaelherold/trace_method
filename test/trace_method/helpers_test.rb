@@ -108,4 +108,47 @@ class TraceMethod::HelpersTest < TraceMethodTests::TestCase
       assert_match %r{test/trace_method/helpers_test\.rb:\d+$}, callers['vuvuzela'].first
     end
   end
+
+  def test_singleton_key_naming
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
+    config.adapter = adapter
+
+    TraceMethod.stub(:config, config) do
+      ExtendedSingleton.zipadee
+
+      assert_equal ['Class::TraceMethod::HelpersTest::ExtendedSingleton'], TraceMethod.modules_with_traces
+    end
+  end
+
+  def test_anonymous_module_key_patterns
+    anonymous = Class.new do
+      extend TraceMethod::Helpers
+
+      trace_singleton_method :no_colons
+
+      def self.no_colons; end
+    end
+
+    anonymous2 = Class.new do
+      extend TraceMethod::Helpers
+
+      trace_singleton_method :no_colons
+
+      def self.no_colons; end
+    end
+
+    adapter = TraceMethod::Adapters::Redis.new(url: 'redis://localhost:5379/1')
+    config = TraceMethod::Config.new
+    config.adapter = adapter
+
+    TraceMethod.stub(:config, config) do
+      anonymous.no_colons
+      anonymous2.no_colons
+
+      modules = TraceMethod.modules_with_traces
+      assert_equal 2, modules.length
+      refute(modules.any? { |name| name.include?(':') || name.include?('<') || name.include?('>') })
+    end
+  end
 end
