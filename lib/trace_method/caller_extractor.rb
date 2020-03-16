@@ -3,15 +3,11 @@
 module TraceMethod
   module CallerExtractor
     def self.call(lines)
-      if (matcher = construct_matcher)
-        lines.find { |line| line.match?(matcher) }
-      else
-        lines.first
-      end
+      lines.find { |line| line.match?(matcher) }
     end
 
-    private_class_method def self.construct_matcher
-      return unless (root = TraceMethod.config.app_root)
+    private_class_method def self.matcher
+      return Regexp.new('.*') unless (root = TraceMethod.config.app_root)
 
       ignores = Array(TraceMethod.config.ignored)
 
