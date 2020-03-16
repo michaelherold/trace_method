@@ -79,7 +79,7 @@ class TraceMethod::ModuleTest < TraceMethodTests::TestCase
 
     callers = adapter.callers(Foo.name, 'foo')
     assert_equal 1, callers.length
-    assert_match(/test\.rb:\d+$/, callers.first)
+    assert_match(%r{^/test\.rb:\d+$}, callers.first)
   end
 
   def test_that_it_is_tagged_with_a_trace_method_tag
