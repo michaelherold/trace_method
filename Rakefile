@@ -32,16 +32,4 @@ end
 
 task yardstick: %i[yardstick_measure yardstick_verify]
 
-task :mutant do
-  command = [
-    'bundle exec mutant',
-    '--include test',
-    '--require trace_method',
-    '--use minitest',
-    'TraceMethod*'
-  ].join(' ')
-
-  system command
-end
-
 task default: %i[test rubocop yard inch]

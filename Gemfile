@@ -12,7 +12,6 @@ group :development do
   gem 'guard-rubocop'
   gem 'guard-yard'
   gem 'inch'
-  gem 'mutant-minitest'
   gem 'rubocop'
   gem 'yard', '~> 0.9'
   gem 'yardstick'
