@@ -12,7 +12,7 @@ group :development do
   gem 'guard-rubocop'
   gem 'guard-yard'
   gem 'inch'
-  gem 'rubocop'
+  gem 'rubocop', '0.80.0' unless ENV['MUTANT']
   gem 'yard', '~> 0.9'
   gem 'yardstick'
 
