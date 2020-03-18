@@ -17,12 +17,12 @@ module TraceMethod
     def self.define_methods_on(mod, *methods)
       methods.each do |method_name|
         mod.define_method method_name do |*args, &blk|
-          name = NameExtractor.call(self)
+          config = TraceMethod.config
           trace = TraceMethod::CallerExtractor.call(caller)
           line, *_context = trace.split(/:in `/)
-          line = line.delete_prefix(TraceMethod.config.app_root) if TraceMethod.config.app_root?
+          line = line.delete_prefix(config.app_root) if config.app_root?
 
-          TraceMethod.config.adapter.add_caller name, method_name, line
+          config.adapter.add_caller NameExtractor.call(self), method_name, line
 
           super(*args, &blk)
         end
