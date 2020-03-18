@@ -7,9 +7,10 @@ module TraceMethod
     end
 
     private_class_method def self.matcher
-      return Regexp.new('.*') unless (root = TraceMethod.config.app_root)
+      config = TraceMethod.config
+      return Regexp.new('.*') unless (root = config.app_root)
 
-      ignores = Array(TraceMethod.config.ignored)
+      ignores = Array(config.ignored)
 
       if ignores.empty?
         Regexp.new("^#{root}")

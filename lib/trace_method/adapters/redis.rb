@@ -11,6 +11,10 @@ module TraceMethod
     class Redis < Base
       DEFAULT_EXPIRY = 60 * 60 * 24 * 90
 
+      def self.as_key(*pieces)
+        pieces.join(':')
+      end
+
       def initialize(configuration)
         @base_key = 'trace_method'
         @client = ::Redis.new(configuration)
@@ -25,11 +29,11 @@ module TraceMethod
       end
 
       def callers(mod, method_name)
-        client.smembers as_key(base_key, mod.split('::'), method_name)
+        client.smembers Redis.as_key(base_key, mod.split('::'), method_name)
       end
 
       def traces(mod)
-        client.smembers as_key(base_key, mod.split('::'))
+        client.smembers Redis.as_key(base_key, mod.split('::'))
       end
 
       def traced_callers(mod)
@@ -53,8 +57,8 @@ module TraceMethod
       end
 
       def add_caller(mod, method_name, calling_line)
-        namespace = as_key base_key, mod.split('::')
-        method_key = as_key namespace, method_name
+        namespace = Redis.as_key base_key, mod.split('::')
+        method_key = Redis.as_key namespace, method_name
 
         client.pipelined do
           client.sadd base_key, namespace
@@ -72,10 +76,6 @@ module TraceMethod
       attr_reader :base_key
       attr_reader :client
 
-      def as_key(*pieces)
-        pieces.join(':')
-      end
-
       def as_module(key)
         key
           .delete_prefix("#{base_key}:")
@@ -86,7 +86,7 @@ module TraceMethod
         members = client.smembers(namespace)
 
         client.pipelined do
-          members.each { |method_name| client.del as_key(namespace, method_name) }
+          members.each { |method_name| client.del Redis.as_key(namespace, method_name) }
           client.del namespace
         end
       end

@@ -8,11 +8,11 @@ class TraceMethod::ModuleTest < TraceMethodTests::TestCase
 
     def foo; end
 
-    # rubocop:disable Naming/UncommunicativeMethodParamName
+    # rubocop:disable Naming/MethodParameterName
     def bar(a, b = 'b', *args, c:, d: 'd', **kwargs)
       [a, b, *args, c, d, kwargs, block_given? ? yield : nil].compact
     end
-    # rubocop:enable Naming/UncommunicativeMethodParamName
+    # rubocop:enable Naming/MethodParameterName
   end
 
   def test_that_it_wraps_methods_in_a_trace_method

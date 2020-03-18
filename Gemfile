@@ -12,8 +12,7 @@ group :development do
   gem 'guard-rubocop'
   gem 'guard-yard'
   gem 'inch'
-  gem 'mutant-minitest'
-  gem 'rubocop'
+  gem 'rubocop', '0.80.0' unless ENV['MUTANT']
   gem 'yard', '~> 0.9'
   gem 'yardstick'
 
@@ -32,6 +31,6 @@ group :test do
   gem 'danger-rubocop', require: false
   gem 'minitest'
   gem 'minitest-reporters'
-  gem 'simplecov', require: false
+  gem 'simplecov', '< 0.18', require: false
   gem 'timecop'
 end

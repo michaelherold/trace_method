@@ -8,6 +8,7 @@ require_relative 'trace_method/adapters'
 require_relative 'trace_method/config'
 require_relative 'trace_method/helpers'
 require_relative 'trace_method/module'
+require_relative 'trace_method/trace'
 require_relative 'trace_method/version'
 
 module TraceMethod

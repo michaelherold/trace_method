@@ -1,0 +1,15 @@
+---
+detectors:
+  Attribute:
+    exclude:
+      - TraceMethod::Config#adapter
+      - TraceMethod::Config#app_root
+      - TraceMethod::Config#ignored
+  IrresponsibleModule:
+    enabled: false
+  NestedIterators:
+    ignore_iterators:
+      - define_method
+      - tap
+  TooManyStatements:
+    enabled: false

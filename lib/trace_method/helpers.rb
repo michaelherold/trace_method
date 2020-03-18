@@ -7,12 +7,12 @@ module TraceMethod
     end
 
     def trace_methods(*methods)
-      add_traces_for(self, methods)
+      Trace.add_to(self, methods)
     end
     alias trace_method trace_methods
 
     def trace_singleton_methods(*methods)
-      add_traces_for(singleton_class, methods)
+      Trace.add_to(singleton_class, methods)
     end
     alias trace_singleton_method trace_singleton_methods
 
@@ -43,16 +43,6 @@ module TraceMethod
 
     def __adapter__
       @__adapter__ ||= TraceMethod.config.adapter
-    end
-
-    def add_traces_for(base, methods)
-      raise UnspecifiedMethods, 'You must give at least one method to trace' if methods.empty?
-
-      if (mod = base.ancestors.find(&:__trace_method__?))
-        Module.define_methods_on(mod, *methods)
-      else
-        base.prepend Module.new(*methods)
-      end
     end
   end
 end

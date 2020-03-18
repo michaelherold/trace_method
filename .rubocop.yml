@@ -17,9 +17,20 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
 Metrics:
   Exclude:
     - test/**/*_test.rb
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 100
+  Exclude:
+    - test/**/*_test.rb

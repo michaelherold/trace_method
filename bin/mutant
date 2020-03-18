@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+ENV['MUTANT'] = '1'
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+
+trap('INT') do |status|
+  effective_status = status ? status + 128 : 128
+  exit! effective_status
+end
+
+require 'bundler/inline'
+
+gemfile do
+  gem 'mutant', '0.8.24'
+  gem 'mutant-minitest', '0.8.24'
+  gem 'pry'
+
+  eval_gemfile File.expand_path('../Gemfile', __dir__)
+end
+
+require 'mutant'
+
+Mutant::CLI.run(
+  [
+    '--include',
+    'test',
+    '--require',
+    'trace_method',
+    '--use',
+    'minitest',
+    'TraceMethod*'
+  ]
+)
